@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp QR Code Scanner</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <h1>WhatsApp Authentication</h1>
+                <p>Scan the QR code with your WhatsApp mobile app to connect</p>
+            </div>
+
+            <div class="qr-container" id="qrContainer">
+                <div class="qr-loading" id="qrLoading">
+                    <div class="spinner"></div>
+                    <p>Generating QR Code...</p>
+                </div>
+                
+                <div class="qr-code" id="qrCode" style="display: none;">
+                    <img id="qrImage" alt="WhatsApp QR Code">
+                    <div class="qr-overlay">
+                        <div class="scan-animation"></div>
+                    </div>
+                </div>
+
+                <div class="qr-success" id="qrSuccess" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Successfully Connected!</h3>
+                    <p>Your WhatsApp is now connected to the server</p>
+                </div>
+
+                <div class="qr-error" id="qrError" style="display: none;">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Connection Error</h3>
+                    <p id="errorMessage">Unable to generate QR code</p>
+                    <button class="retry-btn" onclick="loadQRCode()">
+                        <i class="fas fa-redo"></i>
+                        Retry
+                    </button>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>How to connect:</h3>
+                <ol>
+                    <li>Open WhatsApp on your phone</li>
+                    <li>Go to Settings > Linked Devices</li>
+                    <li>Tap "Link a Device"</li>
+                    <li>Point your phone camera at the QR code</li>
+                    <li>Wait for the connection to complete</li>
+                </ol>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <i class="fas fa-circle" id="statusIcon"></i>
+                    <span id="statusText">Connecting...</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-clock"></i>
+                    <span id="lastUpdate">Just now</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
