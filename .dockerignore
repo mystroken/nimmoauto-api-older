@@ -1,0 +1,17 @@
+node_modules
+dist
+npm-debug.log
+.env
+.git
+.gitignore
+README.md
+*.md
+.DS_Store
+coverage
+.vscode
+.idea
+*.log
+whatsapp-session
+.wwebjs_auth
+.wwebjs_cache
+deploy.sh

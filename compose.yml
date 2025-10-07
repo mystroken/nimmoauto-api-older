@@ -1,0 +1,77 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - 80
+      - 443
+      - 3000
+    volumes:
+      - whatsapp-session:/app/whatsapp-session
+      - app-logs:/app/logs
+    environment:
+      # Nginx Proxy
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mongodb:
+    image: mongo:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}-db
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=nimmoauto-api
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    networks:
+      - app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/nimmoauto-api --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  mongodb-data:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}-db-data
+  mongodb-config:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}-db-config
+  whatsapp-session:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}-whatsapp-session
+  app-logs:
+    driver: local
+    name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}-app-logs
+
+networks:
+  app-network:
+    name: ${COMPOSE_PROJECT_NAME:-nimmoauto-api}
+    driver: bridge
