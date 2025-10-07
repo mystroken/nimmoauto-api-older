@@ -32,6 +32,8 @@ app.use(
           "blob:",
           "'unsafe-inline'",
         ],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        scriptSrcAttr: ["'unsafe-inline'"],
       },
     },
   })
